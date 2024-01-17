@@ -1,0 +1,49 @@
+schema {
+    query: Query,
+    mutation: Mutation
+}
+
+scalar Long
+
+type Customer{
+    accountNo: Long
+    name: FullName
+    email: String
+    password: String
+    phoneNo: Long
+}
+
+type FullName{
+    firstName: String
+    middleName: String
+    lastName: String
+}
+
+
+input CustomerInput{
+    accountNo: Long
+    name: FullNameInput
+    email: String
+    password: String
+    phoneNo: Long
+}
+
+input FullNameInput{
+    firstName: String
+    middleName: String
+    lastName: String
+}
+
+type Mutation{
+
+    createCustomer(customerInput:CustomerInput): Customer
+    updateCustomer(accountNo: Long, password: String, phoneNo: Long): Customer
+    deleteCustomer(accountNo: Long): Boolean
+}
+
+
+type Query{
+    findAllCustomers:[Customer]
+    findCustomerByAccountNo(accountNo: Long): Customer
+    findCustomerByEmail(email: String): Customer
+}
