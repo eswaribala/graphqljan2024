@@ -1,0 +1,28 @@
+type Address{
+    addressId: Long
+    doorNo: String
+    streetName: String
+    city: String
+    pincode: Long
+    customer: Customer
+}
+
+input AddressInput{
+    doorNo: String
+    streetName: String
+    city: String
+    pincode: Long
+    customer: CustomerInput
+}
+
+extend type Query {
+    findAllAddresses:[Address]
+    findAddressByPinCode(pincode: Long): [Address]
+    findAddressByAccountNo(accountNo: Long): Address
+}
+
+extend type Mutation{
+    createAddress(addressInput:AddressInput): Address
+    updateAddress(addressId: Long,addressInput:AddressInput): Address
+    deleteAddress(addressId: Long): Boolean
+}

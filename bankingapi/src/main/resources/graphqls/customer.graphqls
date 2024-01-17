@@ -34,7 +34,6 @@ input FullNameInput{
 }
 
 type Mutation{
-
     createCustomer(customerInput:CustomerInput): Customer
     updateCustomer(accountNo: Long, password: String, phoneNo: Long): Customer
     deleteCustomer(accountNo: Long): Boolean
