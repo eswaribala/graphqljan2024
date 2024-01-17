@@ -16,7 +16,7 @@ input AddressInput{
 }
 
 extend type Query {
-    findAllAddresses:[Address]
+    findAllAddresses: [Address]
     findAddressByPinCode(pincode: Long): [Address]
     findAddressByAccountNo(accountNo: Long): Address
 }
