@@ -21,7 +21,6 @@ type FullName{
 
 
 input CustomerInput{
-    accountNo: Long
     name: FullNameInput
     email: String
     password: String
