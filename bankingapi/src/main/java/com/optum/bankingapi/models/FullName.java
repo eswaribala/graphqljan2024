@@ -2,10 +2,16 @@ package com.optum.bankingapi.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Embeddable
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FullName {
     @Column(name = "First_Name",nullable = false,length = 50)
     private String firstName;
