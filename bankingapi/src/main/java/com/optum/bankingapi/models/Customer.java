@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name="Customer")
@@ -28,4 +31,11 @@ public class Customer {
     private String password;
     @Column(name="Phone_No")
     private long phoneNo;
+    @Column(name="Gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+    @Column(name="DOB")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate dob;
+
 }

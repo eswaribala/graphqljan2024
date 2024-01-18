@@ -4,13 +4,19 @@ schema {
 }
 
 scalar Long
+scalar Date
+enum Gender{
+    MALE,FEMALE
+}
 
 type Customer{
     accountNo: Long
     name: FullName
     email: String
     password: String
-    phoneNo: Long
+    phoneNo: Long,
+    gender:Gender
+    dob: Date
 }
 
 type FullName{
@@ -24,7 +30,9 @@ input CustomerInput{
     name: FullNameInput
     email: String
     password: String
-    phoneNo: Long
+    phoneNo: Long,
+    gender: Gender,
+    dob: Date
 }
 
 input FullNameInput{
