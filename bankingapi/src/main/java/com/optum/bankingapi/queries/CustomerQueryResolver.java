@@ -48,6 +48,7 @@ public class CustomerQueryResolver implements GraphQLQueryResolver {
         }
 
         if (specification != null)
+            //must extend jpa specification executor @ repository interface
             return customerRepository.findAll(specification);
         else
             return customerRepository.findAll();

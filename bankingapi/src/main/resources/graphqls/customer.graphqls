@@ -53,7 +53,7 @@ type Query{
     findAllCustomers:[Customer]
     findCustomerByAccountNo(accountNo: Long): Customer
     findCustomerByEmail(email: String): Customer
-    findCustomerByCustomerFilter(customerFilter:CustomerFilter): Customer
+    findCustomerByCustomerFilter(customerFilter:CustomerFilter): [Customer]
 }
 
 
