@@ -8,11 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AddressRepository extends JpaRepository<Address, Long> {
-
-    @Query("Select a from Address a where a.pincode=:pincode")
+public interface AddressRepository extends JpaRepository<Address,Long> {
+//it will not work with spring boot 3.x deprecated
+/*    @Query("Select a from Address a where a.pincode=:pincode")
     public List<Address> findByPinCode(@Param("pincode") long pincode);
 
     @Query("Select a from Address a where a.customer=:customer")
-    public List<Address> findByCustomerKey(@Param("customer") Customer customer);
+    public List<Address> findByCustomerKey(@Param("customer") Customer customer);*/
 }

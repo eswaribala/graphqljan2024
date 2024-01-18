@@ -2,29 +2,40 @@ package com.optum.bankingapi.services;
 
 import com.optum.bankingapi.models.Address;
 import com.optum.bankingapi.models.Customer;
-import com.optum.bankingapi.repositories.AddressRepository;
 
+import com.optum.bankingapi.repositories.AddressRepository;
 import com.optum.bankingapi.repositories.CustomerRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
 @Service
 public class AddressService {
 
-    @Autowired
-    private AddressRepository addressRepository;
+
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
     // insert
-    public Customer addAddress(long accountNo, Address address){
+    public Address addAddress(long accountNo, Address address){
 
         Customer customer=this.customerRepository.findById(accountNo).orElse(null);
          if(customer!=null){
              address.setCustomer(customer);
-            return this.customerRepository.save(customer);
+            return this.addressRepository.save(address);
         }else
             return null;
     }
@@ -38,16 +49,30 @@ public class AddressService {
     //where by accountNo
 
     public List<Address> getAddressByPinCode(long pincode){
-        return this.addressRepository.findByPinCode(pincode);
+        CriteriaBuilder cb= entityManager.getCriteriaBuilder();
+        CriteriaQuery<Address> cq=cb.createQuery(Address.class);
+
+        Root<Address> addressObject=cq.from(Address.class);
+        cq.where(cb.equal(addressObject.get("pincode"),pincode));
+
+        CriteriaQuery<Address> selectResult= cq.select(addressObject);
+        TypedQuery<Address> tq=entityManager.createQuery(selectResult);
+        return tq.getResultList();
     }
 
     // where by accountno
     public List<Address> getAddressByAccountNo(long accountNo){
+
         Customer customer=this.customerRepository.findById(accountNo).orElse(null);
-        if(customer!=null)
-         return this.addressRepository.findByCustomerKey(customer);
-        else
-            return null;
+        CriteriaBuilder cb= entityManager.getCriteriaBuilder();
+        CriteriaQuery<Address> cq=cb.createQuery(Address.class);
+
+        Root<Address> addressObject=cq.from(Address.class);
+        cq.where(cb.equal(addressObject.get("customer"),customer));
+
+        CriteriaQuery<Address> selectResult= cq.select(addressObject);
+        TypedQuery<Address> tq=entityManager.createQuery(selectResult);
+        return tq.getResultList();
     }
 
     //update

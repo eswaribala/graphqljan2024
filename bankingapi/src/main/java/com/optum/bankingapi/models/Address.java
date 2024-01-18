@@ -1,11 +1,19 @@
 package com.optum.bankingapi.models;
 
-import jakarta.persistence.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="Address")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +27,7 @@ public class Address {
     private String city;
     @Column(name="Pin_Code")
     private long pincode;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.MERGE)
     @JoinColumn(foreignKey = @ForeignKey(name = "Account_No"), name = "Account_No")
     private Customer customer;
 }

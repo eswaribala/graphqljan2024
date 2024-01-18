@@ -30,6 +30,6 @@ public class CustomerMutationResolver implements GraphQLMutationResolver {
     }
 
     public boolean deleteCustomer(long accountNo){
-        this.customerService.deleteCustomer(accountNo);
+        return this.customerService.deleteCustomer(accountNo);
     }
 }
