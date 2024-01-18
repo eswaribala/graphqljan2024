@@ -1,0 +1,75 @@
+#schema {
+#    query: Query,
+#    mutation: Mutation
+#}
+
+scalar Long
+scalar Date
+enum Gender{
+    MALE,FEMALE
+}
+
+type Customer{
+    accountNo: Long
+    name: FullName
+    email: String
+    password: String
+    phoneNo: Long,
+    gender:Gender
+    dob: Date
+}
+
+type FullName{
+    firstName: String
+    middleName: String
+    lastName: String
+}
+
+
+input CustomerInput{
+    name: FullNameInput
+    email: String
+    password: String
+    phoneNo: Long,
+    gender: Gender,
+    dob: Date
+}
+
+input FullNameInput{
+    firstName: String
+    middleName: String
+    lastName: String
+}
+
+#type Mutation{
+#    createCustomer(customerInput:CustomerInput): Customer
+#    updateCustomer(accountNo: Long, password: String, phoneNo: Long): Customer
+#    updateGenderDOBCustomer(accountNo: Long, gender: Gender, dob: Date): Customer
+#    deleteCustomer(accountNo: Long): Boolean
+#}
+
+
+#type Query{
+#    findAllCustomers:[Customer]
+#    findCustomerByAccountNo(accountNo: Long): Customer
+#    findCustomerByEmail(email: String): Customer
+#    findCustomerByCustomerFilter(customerFilter:CustomerFilter): [Customer]
+#}
+
+
+input CustomerFilter{
+    accountNo: FilterField
+    gender: GenderFilterField
+}
+
+
+input FilterField{
+    operator: String
+    value: String
+}
+
+input GenderFilterField{
+    operator: String
+    value: Gender
+
+}
