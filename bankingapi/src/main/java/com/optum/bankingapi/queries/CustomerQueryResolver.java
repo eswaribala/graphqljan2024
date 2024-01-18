@@ -1,5 +1,6 @@
 package com.optum.bankingapi.queries;
 
+import com.optum.bankingapi.dtos.CustomerFilter;
 import com.optum.bankingapi.models.Customer;
 import com.optum.bankingapi.services.CustomerService;
 import graphql.kickstart.tools.GraphQLQueryResolver;
@@ -24,5 +25,10 @@ public class CustomerQueryResolver implements GraphQLQueryResolver {
    public Customer findCustomerByEmail(String email){
         return this.customerService.getCustomerByEmail(email);
     }
+
+    public Customer findCustomerByCustomerFilter(CustomerFilter customerFilter){
+
+    }
+
 
 }
