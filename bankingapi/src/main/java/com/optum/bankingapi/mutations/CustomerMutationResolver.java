@@ -21,7 +21,10 @@ public class CustomerMutationResolver implements GraphQLMutationResolver {
                         .lastName(customerInput.getName().getLastName()).build())
                 .email(customerInput.getEmail())
                 .phoneNo(customerInput.getPhoneNo())
-                .password(customerInput.getPassword()).build();
+                .password(customerInput.getPassword())
+                .gender(customerInput.getGender())
+                .dob(customerInput.getDob())
+                .build();
         return this.customerService.addCustomer(customer);
     }
 
