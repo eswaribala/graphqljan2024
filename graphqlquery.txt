@@ -1,0 +1,13 @@
+query{
+  findCustomerByCustomerFilter(customerFilter:{
+    
+    gender:{
+      operator:"eq",
+      value:MALE
+    }
+  }){
+   name{
+    firstName
+  }
+  }
+}
