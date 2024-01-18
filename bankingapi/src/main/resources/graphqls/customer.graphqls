@@ -44,6 +44,7 @@ input FullNameInput{
 type Mutation{
     createCustomer(customerInput:CustomerInput): Customer
     updateCustomer(accountNo: Long, password: String, phoneNo: Long): Customer
+    updateGenderDOBCustomer(accountNo: Long, gender: Gender, dob: Date): Customer
     deleteCustomer(accountNo: Long): Boolean
 }
 

@@ -3,10 +3,13 @@ package com.optum.bankingapi.mutations;
 import com.optum.bankingapi.dtos.CustomerInput;
 import com.optum.bankingapi.models.Customer;
 import com.optum.bankingapi.models.FullName;
+import com.optum.bankingapi.models.Gender;
 import com.optum.bankingapi.services.CustomerService;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 @Component
 public class CustomerMutationResolver implements GraphQLMutationResolver {
@@ -30,6 +33,10 @@ public class CustomerMutationResolver implements GraphQLMutationResolver {
 
     public Customer updateCustomer(long accountNo, String password, long  phoneNo){
         return this.customerService.updateCustomer(accountNo,password,phoneNo);
+    }
+
+    public Customer updateGenderDOBCustomer(long accountNo, Gender gender, LocalDate dob){
+        return this.customerService.updateGenderDOBCustomer(accountNo,gender,dob);
     }
 
     public boolean deleteCustomer(long accountNo){

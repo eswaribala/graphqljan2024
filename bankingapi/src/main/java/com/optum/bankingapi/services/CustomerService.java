@@ -1,6 +1,7 @@
 package com.optum.bankingapi.services;
 
 import com.optum.bankingapi.models.Customer;
+import com.optum.bankingapi.models.Gender;
 import com.optum.bankingapi.repositories.CustomerRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -11,6 +12,7 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -61,6 +63,16 @@ public class CustomerService {
         if (customer != null) {
             customer.setPassword(password);
             customer.setPhoneNo(phoneNo);
+            return this.customerRepository.save(customer);
+        }
+        return null;
+    }
+
+    public Customer updateGenderDOBCustomer(long accountNo, Gender gender, LocalDate dob){
+        Customer customer = this.customerRepository.findById(accountNo).orElse(null);
+        if (customer != null) {
+            customer.setGender(gender);
+            customer.setDob(dob);
             return this.customerRepository.save(customer);
         }
         return null;
