@@ -8,7 +8,7 @@ query{
       value:"anil@gmail.com"
     },
     accountNo:{
-      operator:"gt",
+      operator:"le",
       value:"2"
     }
     },
@@ -30,6 +30,7 @@ query{
     firstName
   }
   }
+}
 ================================================
 query{
   findCustomerByCustomerFilter(customerFilter:{
