@@ -1,22 +1,22 @@
 package com.optum.bankingdgs.fetchers;
 
-import com.netflix.graphql.dgs.DgsComponent;
-import com.netflix.graphql.dgs.DgsMutation;
-import com.netflix.graphql.dgs.DgsQuery;
-import com.netflix.graphql.dgs.InputArgument;
+import com.netflix.graphql.dgs.*;
 import com.optum.bankingdgs.dtos.AddressInput;
 import com.optum.bankingdgs.models.Address;
 import com.optum.bankingdgs.models.Customer;
 import com.optum.bankingdgs.repositories.AddressRepository;
 import com.optum.bankingdgs.repositories.CustomerRepository;
+import graphql.schema.DataFetchingEnvironment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import org.dataloader.DataLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @DgsComponent
 public class AddressFetcher {
@@ -79,6 +79,13 @@ public class AddressFetcher {
     public List<Address> findAllAddresses(){
 
         return this.addressRepository.findAll();
+    }
+
+    @DgsData(parentType = "Address", field = "customer")
+    public CompletableFuture<Customer> cutsomer(DataFetchingEnvironment dfe) {
+        DataLoader<Long,Customer> dataLoader = dfe.getDataLoader("customers");
+        Address address = dfe.getSource();
+        return dataLoader.load(address.getCustomer().getAccountNo());
     }
     @DgsQuery
     public List<Address> findAddressByPinCode(@InputArgument long pincode){
