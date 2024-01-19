@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="Customer")
@@ -36,5 +37,7 @@ public class Customer {
     @Column(name="DOB")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate dob;
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "customer")
+    private List<Address> addressList;
 
 }
