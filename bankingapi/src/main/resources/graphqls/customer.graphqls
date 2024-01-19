@@ -59,7 +59,15 @@ type Query{
 
 input CustomerFilter{
     accountNo: FilterField
+    email: FilterField
     gender: GenderFilterField
+    and: [CustomerFilter]
+    or: [CustomerFilter]
+}
+# Define String expression
+input StringExpression {
+    equals: String
+    contains: String
 }
 
 

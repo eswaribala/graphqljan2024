@@ -7,6 +7,7 @@ import com.optum.bankingapi.models.Customer;
 import com.optum.bankingapi.repositories.CustomerRepository;
 import com.optum.bankingapi.services.CustomerService;
 import graphql.kickstart.tools.GraphQLQueryResolver;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Slf4j
 public class CustomerQueryResolver implements GraphQLQueryResolver {
     @Autowired
     private CustomerService customerService;
@@ -38,21 +40,57 @@ public class CustomerQueryResolver implements GraphQLQueryResolver {
     public List<Customer> findCustomerByCustomerFilter(CustomerFilter customerFilter){
 
         Specification<Customer> specification=null;
-        if(customerFilter.getAccountNo() != null){
-            specification=byAccountNo(customerFilter.getAccountNo());
+
+
+        if((customerFilter.getOr()!=null)&&(customerFilter.getOr().size() > 0)) {
+            log.info("Or Condition Present");
+            for(int i=0;i<customerFilter.getOr().size();i++) {
+
+                log.info(customerFilter.getOr().get(i).getAccountNo().toString());
+                log.info(customerFilter.getOr().get(i).getEmail().toString());
+                if ((customerFilter.getOr().get(i).getAccountNo() != null) || (customerFilter.getOr().get(i).getEmail() != null)) {
+                    log.info(customerFilter.getOr().get(i).getAccountNo().toString());
+                    log.info(customerFilter.getOr().get(i).getEmail().toString());
+                    if(specification!=null)
+                        specification = specification.or(Specification.where(byAccountNo(customerFilter.getOr().get(i).getAccountNo()))
+                                .or(byEmail(customerFilter.getOr().get(i).getEmail())));
+                    else
+                        specification=Specification.where(byAccountNo(customerFilter.getOr().get(i).getAccountNo()))
+                                .or(byEmail(customerFilter.getOr().get(i).getEmail()));
+
+
+                }
+            }
+            //extends Jpa Specification @ repository
+            return this.customerRepository.findAll(specification);
         }
 
-        if (customerFilter.getGender() != null) {
 
-            specification=byGender(customerFilter.getGender());
+
+        if((customerFilter.getAnd()!=null)&&(customerFilter.getAnd().size() > 0)) {
+            log.info("And Condition Present");
+            for(int i=0;i<customerFilter.getAnd().size();i++) {
+
+                log.info(customerFilter.getAnd().get(i).getAccountNo().toString());
+                log.info(customerFilter.getAnd().get(i).getEmail().toString());
+                if ((customerFilter.getAnd().get(i).getAccountNo() != null) || (customerFilter.getAnd().get(i).getEmail() != null)) {
+                    log.info(customerFilter.getAnd().get(i).getAccountNo().toString());
+                    log.info(customerFilter.getAnd().get(i).getEmail().toString());
+                    if(specification!=null)
+                        specification = specification.or(Specification.where(byAccountNo(customerFilter.getAnd().get(i).getAccountNo()))
+                                .and(byEmail(customerFilter.getAnd().get(i).getEmail())));
+                    else
+                        specification=Specification.where(byAccountNo(customerFilter.getAnd().get(i).getAccountNo()))
+                                .and(byEmail(customerFilter.getAnd().get(i).getEmail()));
+
+
+                }
+            }
+            //extends Jpa Specification @ repository
+            return this.customerRepository.findAll(specification);
         }
-
-        if (specification != null)
-            //must extend jpa specification executor @ repository interface
-            return customerRepository.findAll(specification);
         else
-            return customerRepository.findAll();
-
+            return this.customerRepository.findAll();
 
     }
 
@@ -63,5 +101,9 @@ public class CustomerQueryResolver implements GraphQLQueryResolver {
 
     private Specification<Customer> byGender(GenderFilterField genderFilterField){
         return (Specification<Customer>) (root, query, builder) -> genderFilterField.generateCriteria(builder, root.get("gender"));
+    }
+    private Specification<Customer> byEmail(FilterField filterField) {
+        return (Specification<Customer>) (root, query, builder) -> filterField.generateCriteria(builder, root.get("email"));
+
     }
 }

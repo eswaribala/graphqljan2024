@@ -12,12 +12,13 @@ public class GenderFilterField {
     private Gender value;
     public Predicate generateCriteria(CriteriaBuilder cb, Path field) {
 
-            if (operator.equals("eq")){
-                if(value!=null)
-                    return cb.equal(field,value);
-                else
-                    return null;
-            }else
-               return null;
+        switch (operator) {
+            case "endsWith": return cb.like(field, "%" + value);
+            case "startsWith": return cb.like(field, value + "%");
+            case "contains": return cb.like(field, "%" + value + "%");
+            case "eq": return cb.equal(field, value);
+        }
+
+        return null;
     }
 }
