@@ -1,0 +1,9 @@
+type Subscription {
+    currency(symbol: String): Currency
+}
+
+type Currency {
+    symbol: String
+    price: Float
+    timestamp: String
+}
