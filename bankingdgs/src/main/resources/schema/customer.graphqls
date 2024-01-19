@@ -17,6 +17,7 @@ type Customer{
     phoneNo: Long,
     gender:Gender
     dob: Date
+    addressList:[Address]
 }
 
 type FullName{
@@ -33,6 +34,7 @@ input CustomerInput{
     phoneNo: Long,
     gender: Gender,
     dob: Date
+    addressList:[AddressInput]
 }
 
 input FullNameInput{
