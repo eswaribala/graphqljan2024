@@ -4,10 +4,13 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import com.optum.bankingdgs.dtos.AddressInput;
 import com.optum.bankingdgs.dtos.CustomerInput;
+import com.optum.bankingdgs.models.Address;
 import com.optum.bankingdgs.models.Customer;
 import com.optum.bankingdgs.models.FullName;
 import com.optum.bankingdgs.models.Gender;
+import com.optum.bankingdgs.repositories.AddressRepository;
 import com.optum.bankingdgs.repositories.CustomerRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -18,12 +21,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @DgsComponent
 public class CustomerFetcher {
 
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private AddressRepository addressRepository;
     @Autowired
     private EntityManager entityManager;
 
@@ -40,8 +46,43 @@ public class CustomerFetcher {
                 .gender(customerInput.getGender())
                 .dob(customerInput.getDob())
                 .build();
-        return this.customerRepository.save(customer);
 
+        Customer customerResponse = customerRepository.save(customer);
+
+        Address address=null;
+        if (customerInput.getAddressList().size()>0){
+            for(AddressInput addressInput: customerInput.getAddressList()){
+
+                address=Address.builder()
+                        .addressId(0)
+                        .city(addressInput.getCity())
+                        .doorNo(addressInput.getDoorNo())
+                        .streetName(addressInput.getStreetName())
+                        .pincode(addressInput.getPincode())
+                        .customer(customer)
+                        .build();
+                this.addressRepository.save(address);
+            }
+        }
+             customerResponse.setAddressList(mapAccountAddresses(customerInput.getAddressList()));
+
+        return customerResponse;
+
+    }
+
+
+    private List<Address> mapAccountAddresses(List<AddressInput> addressInput) {
+        List<Address> addressList = addressInput.stream().map(addrInput -> {
+           Address address=Address.builder()
+                    .addressId(0)
+                    .city(addrInput.getCity())
+                    .doorNo(addrInput.getDoorNo())
+                    .streetName(addrInput.getStreetName())
+                    .pincode(addrInput.getPincode())
+                    .build();
+            return address;
+        }).collect(Collectors.toList());
+        return addressList;
     }
 
      @DgsMutation

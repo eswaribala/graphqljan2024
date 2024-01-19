@@ -1,11 +1,12 @@
 package com.optum.bankingdgs.dtos;
 
 
+import com.optum.bankingdgs.models.Address;
 import com.optum.bankingdgs.models.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 
 @Data
@@ -18,6 +19,6 @@ public class CustomerInput {
     private long phoneNo;
     private Gender gender;
     private LocalDate dob;
-
+    private List<AddressInput> addressList;
 
 }
