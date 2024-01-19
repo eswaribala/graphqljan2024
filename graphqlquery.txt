@@ -1,13 +1,95 @@
 query{
   findCustomerByCustomerFilter(customerFilter:{
     
-    gender:{
+      and:[ 
+    {
+      email:{
       operator:"eq",
-      value:MALE
+      value:"anil@gmail.com"
+    },
+    accountNo:{
+      operator:"gt",
+      value:"2"
     }
+    },
+    
+     {
+     email:{
+      operator:"eq",
+      value:"vignesh@gmail.com"
+    },
+    accountNo:{
+      operator:"ge",
+      value:"102"
+    }
+    }
+  ]
+  
   }){
    name{
     firstName
   }
   }
+================================================
+query{
+  findCustomerByCustomerFilter(customerFilter:{
+    
+      or:[ 
+    {
+      email:{
+      operator:"eq",
+      value:"anil@gmail.com"
+    },
+    accountNo:{
+      operator:"le",
+      value:"2"
+    }
+    },
+    
+     {
+     email:{
+      operator:"eq",
+      value:"vignesh@gmail.com"
+    },
+    accountNo:{
+      operator:"ge",
+      value:"102"
+    }
+    }
+  ]
+  
+  }){
+   name{
+    firstName
+  }
+  }
+}
+======================================
+query{
+  findCustomerByCustomerFilter(customerFilter:{
+    
+     accountNo:{
+      operator:"ge",
+      value:"2"
+    },
+    email:{
+      operator:"eq",
+      value:"anil@gmail.com"
+    }
+  
+  }){
+   name{
+    firstName
+  }
+  }
+}
+========================================
+subscription($symbol:String){
+  currency(symbol:$symbol){
+    symbol,
+    price,
+    timestamp
+  }
+}
+
 }
